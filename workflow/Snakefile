@@ -37,22 +37,12 @@ TRIMMED_READ_DIR = '{0}/trimmed_reads'.format(config['results_prefix'])
 QC_DIR = '{0}/qc'.format(config['results_prefix'])
 BAM_DIR = '{0}/bam'.format(config['results_prefix'])
 PROGRAM_RESOURCE_DIR = '{0}/program_resources'.format(config['results_prefix'])
-ANGSD_DIR = '{0}/angsd'.format(config['results_prefix'])
-POP_STRUC_DIR = '{0}/population_structure'.format(config['results_prefix'])
-HCN_LOCI_DIR = '{0}/hcn_genotyping'.format(config['results_prefix'])
-FIGURES_DIR = '{0}/figures'.format(config['results_prefix'])
 
 ## Fixed parameters
 
 # Sets number of tasks for processes to be split across nodes during cluster execution
 # (e.g. estimation of SAF files and GLs)
 CORES_PER_NODE = config['cluster']['cores_per_node']
-
-# Parameters for variant calling with ANGSD
-ANGSD_MAX_DP = config['angsd']['max_dp']
-
-# Parameters for pairwise pi and Fst
-BOOT_SEEDS = [x for x in range(1, 101)]
 
 ##################
 #### PIPELINE ####
@@ -63,7 +53,7 @@ wildcard_constraints:
     chrom='|'.join([x for x in CHROMOSOMES])
 
 # Rules to be run locally on as single process
-localrules: create_tmp_dir, create_bam_list_finalSamples_lowCovRemoved, create_samples_to_remove, create_bam_list_highErrorRemoved, angsd_index_degenerate, concat_angsd_stats, concat_sfs, sum_sfs, convert_sites_for_angsd, split_angsd_sites_byChrom, files_for_angsd_site_subset, subset_angsd_gl, subset_angsd_maf, extract_sample_angsd, angsd_done, pop_structure_done, clone_degeneracy, downsample_toronto_done, extract_angsd_allSites, angsd_index_allSites, angsd_index_degenerate, create_bam_list_byCity_byHabitat, angsd_fst_readable, index_toronto_bam, index_bam, concat_habitat_bamLists_withinCities, convert_freq_forNGSrelate, create_random_bam_list_byCity_byHabitat, angsd_byCity_byHabitat_done, angsd_byCity_byHabitat_permuted_done, angsd_byCity_done, angsd_fst_readable_snps_hcn_chroms 
+localrules: create_tmp_dir, create_bam_list_finalSamples_lowCovRemoved, create_samples_to_remove, create_bam_list_highErrorRemoved, clone_degeneracy, downsample_toronto_done, index_toronto_bam, index_bam
 
 # Pipeline targets
 # Each step generates an empty flagfile as its final target
@@ -72,15 +62,7 @@ rule all:
         # Trimming, mapping, and QC
         '{0}/multiqc/multiqc_report.html'.format(QC_DIR),
         # Downsample Toronto data
-        '{0}/downsample_toronto.done'.format(BAM_DIR),
-        # Angsd
-        '{0}/angsd.done'.format(ANGSD_DIR),
-        '{0}/angsd_byCity_byHabitat.done'.format(ANGSD_DIR),
-        '{0}/angsd_byCity_byHabitat_permuted.done'.format(ANGSD_DIR),
-        # Population structure
-        '{0}/population_structure.done'.format(POP_STRUC_DIR),
-        # HCN loci frequencies
-        '{0}/hcn_loci_freq_done'.format(HCN_LOCI_DIR)
+        '{0}/downsample_toronto.done'.format(BAM_DIR)
 
 # Create temporary directory used throughout pipeline
 rule create_tmp_dir:
@@ -96,12 +78,6 @@ include: 'rules/trimming.smk'
 include: 'rules/mapping.smk'
 include: 'rules/qc.smk'
 include: 'rules/toronto_downsample.smk'
-include: 'rules/angsd_global.smk'
-include: 'rules/angsd_byCity.smk'
-include: 'rules/angsd_byCity_byHabitat.smk'
-include: 'rules/angsd_byCity_byHabitat_permute.smk'
-include: 'rules/population_structure.smk'
-include: 'rules/hcn_loci_freqs.smk'
 
 # Rule to clean directory of all output files
 rule clean:
