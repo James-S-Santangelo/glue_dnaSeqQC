@@ -1521,7 +1521,6 @@ SAM	Medellin	38	19	r	Medellin_38_19	Introduced	deep3	2
 SAM	Medellin	38	14	r	Medellin_38_14	Introduced	deep3	2
 SAM	Medellin	39	10	r	Medellin_39_10	Introduced	deep3	2
 SAM	Medellin	39	11	r	Medellin_39_11	Introduced	deep3	2
-SAM	Medellin	39	10	r	Medellin_39_10_dup	Introduced	deep3	2
 SAM	Medellin	40	16	r	Medellin_40_16	Introduced	deep3	2
 SAM	Medellin	40	19	r	Medellin_40_19	Introduced	deep3	2
 SAM	Medellin	40	9	r	Medellin_40_9	Introduced	deep3	2

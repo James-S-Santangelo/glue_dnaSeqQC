@@ -6,8 +6,7 @@ gff: ../resources/TrR.v5.renamed_reformated.gtf.gz
 # Multiple paths to raw reads is a hotfix until reads are on Genbank
 # Can be both the same if reads in in same directory (e.g., Compute Canada) 
 results_prefix: /home/santang3/scratch/glue/results
-glue_raw_read_prefix: /home/santang3/scratch/glue/raw_reads
-tor_raw_read_prefix: /home/santang3/scratch/glue/raw_reads
+raw_read_prefix: /home/santang3/projects/def-johnso73/raw_data
 temp_dir: /home/santang3/scratch/glue/tmp
 
 cluster:

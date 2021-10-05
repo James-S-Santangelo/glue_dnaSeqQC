@@ -28,8 +28,8 @@ GFF_FILE = ancient(config['gff'])
 
 # Paths for output files
 TMPDIR = config['temp_dir']
-GLUE_RAW_READ_DIR = '{0}'.format(config['glue_raw_read_prefix'])
-TOR_RAW_READ_DIR = '{0}'.format(config['tor_raw_read_prefix'])
+RAW_READ_DIR = '{0}'.format(config['raw_read_prefix'])
+REF_DIR = '{0}/ref'.format(config['results_prefix'])
 TRIMMED_READ_DIR = '{0}/trimmed_reads'.format(config['results_prefix'])
 QC_DIR = '{0}/qc'.format(config['results_prefix'])
 BAM_DIR = '{0}/bam'.format(config['results_prefix'])
@@ -50,7 +50,7 @@ wildcard_constraints:
     chrom='|'.join([x for x in CHROMOSOMES])
 
 # Rules to be run locally on as single process
-localrules: create_tmp_dir, create_bam_list_finalSamples_lowCovRemoved, create_samples_to_remove, create_bam_list_highErrorRemoved, clone_degeneracy, downsample_toronto_done, index_toronto_bam, index_bam
+localrules: create_tmp_dir, clone_degeneracy, downsample_toronto_done, index_toronto_bam, index_bam
 
 # Pipeline targets
 # Each step generates an empty flagfile as its final target

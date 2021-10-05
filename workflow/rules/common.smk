@@ -1,16 +1,26 @@
 # Python functions used throughout snakemake workflow
 
+def run_fast_scandir(dir, sample):
+    subfolders, files = [], []
+
+    for f in os.scandir(dir):
+        if f.is_dir():
+            subfolders.append(f.path)
+        if f.is_file():
+            if f.name.startswith(sample):
+                files.append(f.path)
+    for dir in list(subfolders):
+        sf, f = run_fast_scandir(dir, sample)
+        subfolders.extend(sf)
+        files.extend(f) 
+
+    return subfolders, sorted(files)
+
 def get_raw_reads(wildcards):
-    """
-    Extract forward and reverse read FASTQ paths from file
-    """
-    if wildcards.sample.startswith('s_'):
-        R1 = glob.glob(TOR_RAW_READ_DIR + '/{0}/{0}_*_1.fq.gz'.format(wildcards.sample))[0]
-        R2 = glob.glob(TOR_RAW_READ_DIR + '/{0}/{0}_*_2.fq.gz'.format(wildcards.sample))[0]
-    else:
-        R1 = glob.glob(GLUE_RAW_READ_DIR + '/{0}/{0}_*_1.fq.gz'.format(wildcards.sample))[0]
-        R2 = glob.glob(GLUE_RAW_READ_DIR + '/{0}/{0}_*_2.fq.gz'.format(wildcards.sample))[0]
-    return { 'read1' : R1, 'read2' : R2 }
+    folders, reads = run_fast_scandir(RAW_READ_DIR, wildcards.sample)
+    R1 = reads[0]
+    R2 = reads[1]
+    return { 'read1' : R1, 'read2' : R2  }
 
 def get_toronto_bam(wildcards):
     """
