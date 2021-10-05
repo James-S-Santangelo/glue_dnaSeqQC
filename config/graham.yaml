@@ -1,0 +1,26 @@
+# Sample IDs as list
+samples: ../../sequencing-prep/resources/low1_sampleSheet.txt
+chromosomes: ../resources/chromosome_file.txt
+
+# Multiple paths to raw reads is a hotfix until reads are on Genbank
+# Can be both the same if reads in in same directory (e.g., Compute Canada) 
+results_prefix: ../results
+glue_raw_read_prefix: /home/santang3/scratch/glue/raw_reads
+tor_raw_read_prefix: /home/santang3/scratch/glue/raw_reads
+temp_dir: /home/santang3/scratch/glue/tmp
+
+files:
+  reference_genome: /home/santang3/projects/def-johnso73/clover-ref/ref_genome/GCA_005869975.1_AgR_To_v5_genomic.fna
+  gff: /home/santang3/projects/def-johnso73/clover-ref/gff/TrR.v5.renamed_reformated.gtf.gz
+
+cluster:
+  cores_per_node: 32
+
+species_id:
+  num_nt_db_files: 33  # Number of database files for NCBI's nt database (ftp://ftp.ncbi.nlm.nih.gov/blast/db/)
+
+# Parameters for variant calling and SFS estimation with ANGSD
+angsd:
+  max_dp: 1250  # 2 x mean coverage from qualimap x # samples
+
+

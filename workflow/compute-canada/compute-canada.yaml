@@ -1,0 +1,10 @@
+# Configuration file for running Snakemake pipeline on Compute Canada clusters
+# Rule resources (e.g., mem, cpus, time) specified in Snakefiles
+
+__default__:
+  job-name: '{rule}_{wildcards}'
+  account: 'def-johnso73'
+  output: 'slurm_logs/{rule}/{rule}_{wildcards}.out'
+  error: 'slurm_logs/{rule}/{rule}_{wildcards}.err'
+  mail-type: 'FAIL'
+  mail-user: 'james.santangelo37@gmail.com'

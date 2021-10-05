@@ -1,0 +1,55 @@
+extra_fn_clean_exts:
+  - type: regex_keep
+    pattern: '^.*_[\d]*_[\d]{1,2}'
+
+run_modules:
+  - fastqc
+  - fastp
+  - qualimap
+  - bamtools
+
+module_order:
+  - fastqc:
+      name: 'FastQC (raw)'
+      anchor: 'fastqc_raw'
+      info: 'This section of the report shows FastQC results BEFORE adapter trimming.'
+      path_filters:
+        - '*_1_fastqc.zip'
+        - '*_2_fastqc.zip'
+  - fastp:
+      name: 'Fastp'
+      anchor: 'fastp_trim'
+      info: 'This section provides stats calculated by fastp during adapter trimming'
+      path_filters:
+        - '*_fastp.json'
+  - fastqc:
+      name: 'FastQC (trimmed)'
+      anchor: 'fastqc_trimmed'
+      info: 'This section of the report shows FastQC results AFTER adapter trimming.'
+      path_filters:
+        - '*_trimmed_1_fastqc.zip'
+        - '*_trimmed_2_fastqc.zip'
+  - qualimap:
+      name: 'Qualimap'
+      anchor: 'qualimap_bamqc'
+      info: 'This section shows results from Qualimap QC of all BAM files'
+  - bamtools:
+      name: 'Bamtools stats'
+      anchor: 'bamtools_stats'
+      info: 'This section shows stats from BAM file flags analyzed using bamtools'
+
+report_section_order:
+  fastqc_raw:
+    order: 50
+  fastp_trim:
+    order: 40
+  fastqc_trimmed:
+    order: 30
+  qualimap_bamqc:
+    order: 20
+  bamtools_stats:
+    order: 10
+
+sp:
+  bamtools/stats:
+    fn: '*_bamtools.stats'
