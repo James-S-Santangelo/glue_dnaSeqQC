@@ -85,7 +85,7 @@ rule bamtools_stats:
 
 rule bamutil_validate:
     input:
-        bam = rules.samtools_markdup.output,
+        bam = rules.samtools_markdup.output.bam,
         index = rules.index_bam.output
     output:
         '{0}/bamutil_validate/{{sample}}_validation.txt'.format(QC_DIR)

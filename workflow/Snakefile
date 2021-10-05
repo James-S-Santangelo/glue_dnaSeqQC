@@ -14,20 +14,17 @@ from snakemake.utils import min_version
 min_version('5.26.1')
 
 # Defailt configfile. Can be changed at command-line (--configfile)
-configfile: '../config/hpcnode.yaml'
+configfile: '../config/graham.yaml'
 
 SAMPLE_SHEET_DF = pd.read_table(config['samples'], sep='\t')
 
 # Sample and chromosome info
 SAMPLES = SAMPLE_SHEET_DF['sample'].tolist()
 TOR_SAMPLES = [x for x in SAMPLES if x.startswith('s_')]
-CITIES = SAMPLE_SHEET_DF['city'].unique().tolist()
-HABITATS = SAMPLE_SHEET_DF['site'].unique().tolist()
 CHROMOSOMES = pd.read_table(config['chromosomes'], header=None).iloc[:,0].tolist()
 
 # Reference genome and annotation
-REFERENCE_GENOME = ancient(config['files']['reference_genome'])
-GFF_FILE = ancient(config['files']['gff'])
+GFF_FILE = ancient(config['gff'])
 
 # Paths for output files
 TMPDIR = config['temp_dir']

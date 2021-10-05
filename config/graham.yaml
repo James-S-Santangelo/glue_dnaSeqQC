@@ -1,17 +1,14 @@
 # Sample IDs as list
 samples: ../resources/glue_allSamples_sampleSheet.txt
 chromosomes: ../resources/chromosome_file.txt
+gff: ../resources/TrR.v5.renamed_reformated.gtf.gz
 
 # Multiple paths to raw reads is a hotfix until reads are on Genbank
 # Can be both the same if reads in in same directory (e.g., Compute Canada) 
-results_prefix: ../results
+results_prefix: /home/santang3/scratch/glue/results
 glue_raw_read_prefix: /home/santang3/scratch/glue/raw_reads
 tor_raw_read_prefix: /home/santang3/scratch/glue/raw_reads
 temp_dir: /home/santang3/scratch/glue/tmp
-
-files:
-  reference_genome: /home/santang3/projects/def-johnso73/clover-ref/ref_genome/GCA_005869975.1_AgR_To_v5_genomic.fna
-  gff: /home/santang3/projects/def-johnso73/clover-ref/gff/TrR.v5.renamed_reformated.gtf.gz
 
 cluster:
   cores_per_node: 32
