@@ -1,12 +1,8 @@
-# Rules for mapping reads to reference genome and processing BAM files
-
 rule bwa_map_unpaired:
-    """
-    Map trimmed unpaired reads using bwa and output as BAM
-    """
     input:
         unp = rules.fastp_trim.output.unp,
-        ref = REFERENCE_GENOME
+        ref = rules.unzip_reference.output,
+        ref_done = rules.ref_done.output
     output:
         temp('{0}/unpaired/{{sample}}_unpaired_sorted.bam'.format(BAM_DIR))
     params:
@@ -24,13 +20,11 @@ rule bwa_map_unpaired:
         """
 
 rule bwa_map_paired:
-    """
-    Map trimmed paired reads using bwa and output as BAM
-    """
     input:
         r1 = rules.fastp_trim.output.r1_trim,
         r2 = rules.fastp_trim.output.r2_trim,
-        ref = REFERENCE_GENOME
+        ref = rules.unzip_reference.output,
+        ref_done = rules.ref_done.output
     output:
         temp('{0}/paired/{{sample}}_paired_sorted.bam'.format(BAM_DIR))
     params:
@@ -48,9 +42,6 @@ rule bwa_map_paired:
         """
 
 rule merge_bams:
-    """
-    Merge mapped paired and unpaired BAM files. Sort by name for mate fixing.
-    """
     input:
         unp = rules.bwa_map_unpaired.output,
         pair = rules.bwa_map_paired.output
@@ -69,10 +60,6 @@ rule merge_bams:
         """.format(TMPDIR)
 
 rule samtools_markdup:
-    """
-    Fix mate pairs with samtools fixmate. Sort by coordinates and mark duplicate reads using
-    samtools markdup.
-    """
     input:
         rules.merge_bams.output
     output:
@@ -82,7 +69,7 @@ rule samtools_markdup:
     log: 'logs/samtools_markdup/{sample}_samtools_markdup.log'
     threads: 8
     resources:
-        mem_mb = lambda wildcards, attempt: attempt * 5000,
+        mem_mb = lambda wildcards, attempt: attempt * 10000,
         time = '01:00:00'
     shell:
         """
@@ -92,9 +79,6 @@ rule samtools_markdup:
         """.format(TMPDIR)
 
 rule index_bam:
-    """
-    Index coordinate-sorted BAM with marked duplicates.
-    """
     input:
         rules.samtools_markdup.output.bam
     output:
@@ -108,4 +92,3 @@ rule index_bam:
         """
         samtools index -@ {threads} {input} 2> {log}
         """
-
