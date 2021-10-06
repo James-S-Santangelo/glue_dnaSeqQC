@@ -19,7 +19,7 @@ rule fastp_trim:
     threads: 4
     resources:
         mem_mb = lambda wildcards, input, attempt: attempt * 4000,
-        time = '01:00:00'
+        time = '03:00:00'
     shell:
         """
         fastp --in1 {input.read1} \

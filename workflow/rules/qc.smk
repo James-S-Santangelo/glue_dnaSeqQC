@@ -11,8 +11,8 @@ rule fastqc_raw_reads:
     log: 'logs/fastqc_raw_reads/{sample}_fastqc_raw_reads.log'
     threads: 2
     resources: 
-        mem_mb = 1000, 
-        time = '01:00:00'
+        mem_mb = lambda wildcards, attempt: attempt * 2000, 
+        time = '03:00:00'
     shell:
         """
         ( fastqc --threads {{threads}} --outdir {0}/fastqc_raw_reads --noextract --quiet --dir {{input.tmp}} {{input.read1}} {{input.read2}} &&
@@ -36,8 +36,8 @@ rule fastqc_trimmed_reads:
     log: 'logs/fastqc_trimmed_reads/{sample}_fastqc_trimmed_reads.log'
     threads: 2
     resources:
-        mem_mb = 1000,
-        time = '01:00:00'
+        mem_mb = lambda wildcards, attempt: attempt * 1000,
+        time = '03:00:00'
     shell:
         """
         fastqc --threads {{threads}} --outdir {0}/fastqc_trimmed_reads --noextract --quiet --dir {1} {{input.read1}} {{input.read2}} 2> {{log}}
@@ -53,7 +53,7 @@ rule qualimap_bam_qc:
     threads: 8
     resources:
         mem_mb = lambda wildcards, threads, input, attempt: attempt * 10000,
-        time = lambda wildcards, attempt: str(attempt * 2) + ":00:00"
+        time = lambda wildcards, attempt: str(attempt * 3) + ":00:00"
     shell:
         """
         unset DISPLAY;
@@ -74,7 +74,7 @@ rule bamtools_stats:
     conda: '../envs/qc.yaml'
     log: 'logs/bamtools_stats/{sample}_bamtools_stats.log'
     resources:
-        mem_mb = 4000,
+        mem_mb = lambda wildcards, attempt: attempt * 4000,
         time = '01:00:00'
     shell:
         """
@@ -89,7 +89,7 @@ rule bamutil_validate:
     log: 'logs/bamutil_validate/{sample}_validation.log'
     conda: '../envs/qc.yaml'
     resources:
-        mem_mb = 4000,
+        mem_mb = wildcards, attempt: attempt * 4000,
         time = '01:00:00'
     shell:
         """
@@ -116,7 +116,7 @@ rule multiqc:
     log: 'logs/multiqc/multiqc.log'
     resources:
         mem_mb = lambda wildcards, attempt: attempt * 10000,
-        time = '01:00:00'
+        time = '03:00:00'
     shell:
         """
         multiqc --verbose \

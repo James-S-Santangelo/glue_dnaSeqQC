@@ -50,7 +50,7 @@ wildcard_constraints:
     chrom='|'.join([x for x in CHROMOSOMES])
 
 # Rules to be run locally on as single process
-localrules: create_tmp_dir, clone_degeneracy, downsample_toronto_done, index_toronto_bam, index_bam
+localrules: create_tmp_dir, downsample_toronto_done, index_toronto_bam, index_bam
 
 # Pipeline targets
 # Each step generates an empty flagfile as its final target

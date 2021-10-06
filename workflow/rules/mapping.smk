@@ -33,7 +33,7 @@ rule bwa_map_paired:
     log: 'logs/bwa_map_paired/{sample}_bwa_map.paired.log'
     threads: 6
     resources:
-        mem_mb = lambda wildcards, attempt: attempt * 5000,
+        mem_mb = lambda wildcards, attempt: attempt * 8000,
         time = '06:00:00'
     shell:
         """
@@ -51,8 +51,8 @@ rule merge_bams:
     log: 'logs/merge_bams/{sample}_merge_bams.log'
     threads: 6
     resources:
-        mem_mb = lambda wildcards, attempt: attempt * 2000,
-        time = '01:00:00'
+        mem_mb = lambda wildcards, attempt: attempt * 4000,
+        time = '03:00:00'
     shell:
         """
         ( samtools cat --threads {{threads}} {{input.pair}} {{input.unp}} |\
@@ -70,7 +70,7 @@ rule samtools_markdup:
     threads: 8
     resources:
         mem_mb = lambda wildcards, attempt: attempt * 10000,
-        time = '01:00:00'
+        time = '03:00:00'
     shell:
         """
         ( samtools fixmate --threads {{threads}} -m {{input}} - |\
