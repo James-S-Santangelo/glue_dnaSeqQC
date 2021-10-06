@@ -30,3 +30,15 @@ def get_toronto_bam(wildcards):
     bam = [bam for bam in all_bams if os.path.basename(bam).startswith(wildcards.sample)]
     return bam
 
+def get_correct_bam(wildcards):
+    """
+    Retieve GLUE bam or downsampled Toronto bam based on sample name. Used to pass BAMs to QC
+    """
+    if wildcards.sample.startswith('s_'):
+        bam = expand(rules.downsample_toronto_bam.output, sample=wildcards.sample)
+        idx = expand(rules.index_toronto_bam.output, sample=wildcards.sample)
+    else:
+        bam = expand(rules.samtools_markdup.output.bam, sample=wildcards.sample)
+        idx = expand(rules.index_bam.output, sample=wildcards.sample)
+    return { 'bam' : bam, 'idx' : idx }
+

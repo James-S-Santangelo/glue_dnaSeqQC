@@ -45,8 +45,7 @@ rule fastqc_trimmed_reads:
 
 rule qualimap_bam_qc:
     input:
-        bam = rules.samtools_markdup.output.bam,
-        index = rules.index_bam.output
+        unpack(get_correct_bam)
     output:
         directory('{0}/qualimap/{{sample}}_qualimap_bamqc'.format(QC_DIR))
     log: 'logs/qualimap/{sample}_bamqc.log'
@@ -69,8 +68,7 @@ rule qualimap_bam_qc:
 
 rule bamtools_stats:
     input:
-        bam = rules.samtools_markdup.output.bam,
-        index = rules.index_bam.output
+        unpack(get_correct_bam)
     output:
         '{0}/bamtools_stats/{{sample}}_bamtools.stats'.format(QC_DIR)
     conda: '../envs/qc.yaml'
@@ -85,8 +83,7 @@ rule bamtools_stats:
 
 rule bamutil_validate:
     input:
-        bam = rules.samtools_markdup.output.bam,
-        index = rules.index_bam.output
+        unpack(get_correct_bam)
     output:
         '{0}/bamutil_validate/{{sample}}_validation.txt'.format(QC_DIR)
     log: 'logs/bamutil_validate/{sample}_validation.log'
