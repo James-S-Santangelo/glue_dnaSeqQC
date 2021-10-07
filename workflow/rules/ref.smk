@@ -26,7 +26,7 @@ rule samtools_index_reference:
     output:
         '{0}/GCA_005869975.1_AgR_To_v5_genomic.fna.fai'.format(REF_DIR)
     conda: '../envs/ref.yaml'
-    log: 'logs/samtools_index_reference/samtools/index_reference.log'
+    log: 'logs/samtools_index_reference/index_reference.log'
     shell:
         """
         samtools faidx {input} 2> {log}

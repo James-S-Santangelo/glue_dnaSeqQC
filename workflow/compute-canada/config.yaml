@@ -5,7 +5,7 @@ local-cores: 1
 
 jobscript: "slurm-jobscript.sh"
 cluster: "slurm-submit.py"
-#cluster-status: "slurm-status.py"
+cluster-status: "slurm-status.py"
 
 #default-resources: [mem_mb=4000, time="01:00:00"]
 restart-times: 3
