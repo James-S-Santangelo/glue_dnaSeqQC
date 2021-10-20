@@ -35,12 +35,6 @@ QC_DIR = '{0}/qc'.format(config['results_prefix'])
 BAM_DIR = '{0}/bam'.format(config['results_prefix'])
 PROGRAM_RESOURCE_DIR = '{0}/program_resources'.format(config['results_prefix'])
 
-## Fixed parameters
-
-# Sets number of tasks for processes to be split across nodes during cluster execution
-# (e.g. estimation of SAF files and GLs)
-CORES_PER_NODE = config['cluster']['cores_per_node']
-
 ##################
 #### PIPELINE ####
 ##################

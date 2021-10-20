@@ -9,6 +9,3 @@ results_prefix: /home/santang3/scratch/glue/dnaSqQC/results
 raw_read_prefix: /home/santang3/projects/def-johnso73/raw_data
 temp_dir: /home/santang3/scratch/glue/tmp
 
-cluster:
-  cores_per_node: 32
-
