@@ -5,7 +5,8 @@ rule downsample_toronto_bam:
     Sample 25% of reads from Toronto sample using samtools. 
     """
     input:
-        get_toronto_bam
+        bam = rules.samtools_markdup.output.bam,
+        idx = rules.index_bam.output
     output:
         '{0}/toronto_bams/{{sample}}_merged_sorted_dupsMarked_downsampled.bam'.format(BAM_DIR)
     conda: '../envs/mapping.yaml'
@@ -17,7 +18,7 @@ rule downsample_toronto_bam:
         time = '01:00:00'
     shell:
         """
-        samtools view -hb -s 0.25 {input} > {output} 2> {log}
+        samtools view -hb -s 0.25 {input.bam} > {output} 2> {log}
         """
 
 rule index_toronto_bam:

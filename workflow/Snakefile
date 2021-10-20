@@ -1,9 +1,9 @@
 import os
+import re
 import glob
 import itertools
 import pandas as pd
 from pathlib import Path
-from tqdm import tqdm
 from snakemake.utils import min_version
 
 ###############

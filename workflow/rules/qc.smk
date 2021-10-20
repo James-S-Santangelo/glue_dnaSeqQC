@@ -16,10 +16,10 @@ rule fastqc_raw_reads:
     shell:
         """
         ( fastqc --threads {{threads}} --outdir {0}/fastqc_raw_reads --noextract --quiet --dir {{input.tmp}} {{input.read1}} {{input.read2}} &&
-        mv {0}/fastqc_raw_reads/{{wildcards.sample}}_*_1_fastqc.html {0}/fastqc_raw_reads/{{wildcards.sample}}_1_fastqc.html &&
-        mv {0}/fastqc_raw_reads/{{wildcards.sample}}_*_1_fastqc.zip {0}/fastqc_raw_reads/{{wildcards.sample}}_1_fastqc.zip &&
-        mv {0}/fastqc_raw_reads/{{wildcards.sample}}_*_2_fastqc.html {0}/fastqc_raw_reads/{{wildcards.sample}}_2_fastqc.html &&
-        mv {0}/fastqc_raw_reads/{{wildcards.sample}}_*_2_fastqc.zip {0}/fastqc_raw_reads/{{wildcards.sample}}_2_fastqc.zip ) 2> {{log}}
+        mv {0}/fastqc_raw_reads/{{wildcards.sample}}_CKD*_1_fastqc.html {0}/fastqc_raw_reads/{{wildcards.sample}}_1_fastqc.html &&
+        mv {0}/fastqc_raw_reads/{{wildcards.sample}}_CKD*_1_fastqc.zip {0}/fastqc_raw_reads/{{wildcards.sample}}_1_fastqc.zip &&
+        mv {0}/fastqc_raw_reads/{{wildcards.sample}}_CKD*_2_fastqc.html {0}/fastqc_raw_reads/{{wildcards.sample}}_2_fastqc.html &&
+        mv {0}/fastqc_raw_reads/{{wildcards.sample}}_CKD*_2_fastqc.zip {0}/fastqc_raw_reads/{{wildcards.sample}}_2_fastqc.zip ) 2> {{log}}
         """.format(QC_DIR)
 
 rule fastqc_trimmed_reads:
@@ -40,8 +40,8 @@ rule fastqc_trimmed_reads:
         time = '03:00:00'
     shell:
         """
-        fastqc --threads {{threads}} --outdir {0}/fastqc_trimmed_reads --noextract --quiet --dir {1} {{input.read1}} {{input.read2}} 2> {{log}}
-        """.format(QC_DIR, TMPDIR)
+        fastqc --threads {{threads}} --outdir {0}/fastqc_trimmed_reads --noextract --quiet --dir {{input.tmp}} {{input.read1}} {{input.read2}} 2> {{log}}
+        """.format(QC_DIR)
 
 rule qualimap_bam_qc:
     input:
@@ -105,7 +105,7 @@ rule multiqc:
     """
     input:
        fastqc_raw = expand(rules.fastqc_raw_reads.output.zip1, sample=SAMPLES),
-       fastqc_trim = expand(rules.fastqc_raw_reads.output.zip1, sample=SAMPLES),
+       fastqc_trim = expand(rules.fastqc_trimmed_reads.output.zip1, sample=SAMPLES),
        fastp = expand(rules.fastp_trim.output.json, sample=SAMPLES),
        qualimap = expand(rules.qualimap_bam_qc.output, sample=SAMPLES),
        bamstats = expand(rules.bamtools_stats.output, sample=SAMPLES),
@@ -115,8 +115,8 @@ rule multiqc:
     conda: '../envs/qc.yaml'
     log: 'logs/multiqc/multiqc.log'
     resources:
-        mem_mb = lambda wildcards, attempt: attempt * 10000,
-        time = '03:00:00'
+        mem_mb = lambda wildcards, attempt: attempt * 60000,
+        time = '06:00:00'
     shell:
         """
         multiqc --verbose \
