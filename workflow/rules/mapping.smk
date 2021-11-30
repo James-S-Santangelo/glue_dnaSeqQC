@@ -1,4 +1,7 @@
 rule bwa_map_unpaired:
+    """
+    Map trimmed unpaired reads to the reference genome using bwa mem. Output as BAM
+    """
     input:
         unp = rules.fastp_trim.output.unp,
         ref = rules.unzip_reference.output,
@@ -20,6 +23,9 @@ rule bwa_map_unpaired:
         """
 
 rule bwa_map_paired:
+    """
+    Map trimmed paired reads to the reference genome using bwa mem. Output as BAM
+    """
     input:
         r1 = rules.fastp_trim.output.r1_trim,
         r2 = rules.fastp_trim.output.r2_trim,
@@ -42,6 +48,9 @@ rule bwa_map_paired:
         """
 
 rule merge_bams:
+    """
+    Merge unpaired and paired read mapping BAM files
+    """
     input:
         unp = rules.bwa_map_unpaired.output,
         pair = rules.bwa_map_paired.output
@@ -60,6 +69,9 @@ rule merge_bams:
         """.format(TMPDIR)
 
 rule samtools_markdup:
+    """
+    Mark duplicate reads using samtools. Output sorted BAM.
+    """
     input:
         rules.merge_bams.output
     output:
@@ -79,6 +91,9 @@ rule samtools_markdup:
         """.format(TMPDIR)
 
 rule index_bam:
+    """
+    Index sorted BAM with marked duplicates
+    """
     input:
         rules.samtools_markdup.output.bam
     output:

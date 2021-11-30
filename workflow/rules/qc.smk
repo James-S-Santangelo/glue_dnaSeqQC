@@ -1,4 +1,7 @@
 rule fastqc_raw_reads:
+    """
+    QC of raw reads using FASTQC. Simplifies output filenames for easier pipeline integration
+    """
     input:
         unpack(get_raw_reads),
         tmp = rules.create_tmp_dir.output
@@ -23,6 +26,9 @@ rule fastqc_raw_reads:
         """.format(QC_DIR)
 
 rule fastqc_trimmed_reads:
+    """
+    QC of trimmed reads using FASTQC.
+    """
     input:
         tmp = rules.create_tmp_dir.output,
         read1 = rules.fastp_trim.output.r1_trim,
@@ -44,6 +50,9 @@ rule fastqc_trimmed_reads:
         """.format(QC_DIR)
 
 rule qualimap_bam_qc:
+    """
+    QC mapped reads using Qualimap
+    """
     input:
         unpack(get_correct_bam)
     output:
@@ -67,6 +76,9 @@ rule qualimap_bam_qc:
         """.format(QC_DIR)
 
 rule bamtools_stats:
+    """
+    Basic stats for mapped reads (e.g., % aligned, duplicates, etc.). Similar to samtools stats.
+    """
     input:
         unpack(get_correct_bam)
     output:
@@ -82,6 +94,9 @@ rule bamtools_stats:
         """
 
 rule bamutil_validate:
+    """
+    Validate BAM files to flag any obvious errors (e.g., truncation, header issues, etc.)
+    """
     input:
         unpack(get_correct_bam)
     output:

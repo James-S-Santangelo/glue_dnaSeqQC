@@ -1,4 +1,7 @@
 rule download_reference:
+    """
+    Download white clover reference genome from NCBI's FTP directory
+    """
     output:
         '{0}/GCA_005869975.1_AgR_To_v5_genomic.fna.gz'.format(REF_DIR)
     log: 'logs/download_reference/download_reference.log'
@@ -10,6 +13,9 @@ rule download_reference:
         """
 
 rule unzip_reference:
+    """
+    Unzip reference genome
+    """
     input:
         rules.download_reference.output
     output:
@@ -21,6 +27,9 @@ rule unzip_reference:
         """
 
 rule samtools_index_reference:
+    """
+    Index reference genome with samtools
+    """
     input:
         rules.unzip_reference.output
     output:
@@ -33,6 +42,9 @@ rule samtools_index_reference:
         """
 
 rule bwa_index_ref:
+    """
+    Index reference with bwa to get ready for read mapping
+    """
     input:
         rules.unzip_reference.output
     output:
@@ -48,6 +60,9 @@ rule bwa_index_ref:
         """
 
 rule ref_done:
+    """
+    Writes empty flag file to signal successful completion of reference genome rules.
+    """
     input:
         rules.samtools_index_reference.output,
         rules.bwa_index_ref.output

@@ -1,6 +1,9 @@
 # Python functions used throughout snakemake workflow
 
 def run_fast_scandir(dir, sample):
+    """
+    Helper function to perform fast recursive search
+    """
     subfolders, files = [], []
 
     for f in os.scandir(dir):
@@ -16,6 +19,9 @@ def run_fast_scandir(dir, sample):
     return subfolders, sorted(files)
 
 def get_raw_reads(wildcards):
+    """
+    Recursively search for forward and reverse reads for sample
+    """
     folders, reads = run_fast_scandir(RAW_READ_DIR, wildcards.sample)
     R1 = reads[0]
     R2 = reads[1]

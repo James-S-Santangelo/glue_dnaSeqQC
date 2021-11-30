@@ -69,11 +69,3 @@ include: 'rules/trimming.smk'
 include: 'rules/mapping.smk'
 include: 'rules/qc.smk'
 include: 'rules/toronto_downsample.smk'
-
-# Rule to clean directory of all output files
-rule clean:
-    """Clean pipeline output files"""
-    params:
-        'logs {0} {1}/* {2} fastp.json'.format(config['results_prefix'], TRIMMED_READ_DIR, TMPDIR)
-    shell:
-        'rm -rfv {params}'
