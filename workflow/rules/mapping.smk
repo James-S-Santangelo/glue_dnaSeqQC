@@ -4,7 +4,7 @@ rule bwa_map_unpaired:
     """
     input:
         unp = rules.fastp_trim.output.unp,
-        ref = rules.unzip_reference.output,
+        ref = REFERENCE_GENOME,
         ref_done = rules.ref_done.output
     output:
         temp('{0}/unpaired/{{sample}}_unpaired_sorted.bam'.format(BAM_DIR))
@@ -29,7 +29,7 @@ rule bwa_map_paired:
     input:
         r1 = rules.fastp_trim.output.r1_trim,
         r2 = rules.fastp_trim.output.r2_trim,
-        ref = rules.unzip_reference.output,
+        ref = REFERENCE_GENOME,
         ref_done = rules.ref_done.output
     output:
         temp('{0}/paired/{{sample}}_paired_sorted.bam'.format(BAM_DIR))

@@ -54,7 +54,7 @@ rule qualimap_bam_qc:
     QC mapped reads using Qualimap
     """
     input:
-        unpack(get_correct_bam)
+        bam = rules.samtools_markdup.output.bam
     output:
         directory('{0}/qualimap/{{sample}}_qualimap_bamqc'.format(QC_DIR))
     log: 'logs/qualimap/{sample}_bamqc.log'
@@ -80,7 +80,7 @@ rule bamtools_stats:
     Basic stats for mapped reads (e.g., % aligned, duplicates, etc.). Similar to samtools stats.
     """
     input:
-        unpack(get_correct_bam)
+        bam = rules.samtools_markdup.output.bam
     output:
         '{0}/bamtools_stats/{{sample}}_bamtools.stats'.format(QC_DIR)
     conda: '../envs/qc.yaml'
@@ -93,26 +93,6 @@ rule bamtools_stats:
         bamtools stats -in {input.bam} > {output} 2> {log}
         """
 
-rule bamutil_validate:
-    """
-    Validate BAM files to flag any obvious errors (e.g., truncation, header issues, etc.)
-    """
-    input:
-        unpack(get_correct_bam)
-    output:
-        '{0}/bamutil_validate/{{sample}}_validation.txt'.format(QC_DIR)
-    log: 'logs/bamutil_validate/{sample}_validation.log'
-    conda: '../envs/qc.yaml'
-    resources:
-        mem_mb = lambda wildcards, attempt: attempt * 4000,
-        time = '01:00:00'
-    shell:
-        """
-        bam validate --in {input.bam} \
-            --so_coord \
-            --verbose 2> {output}
-        """
-
 rule multiqc:
     """
     Generate single HTML report with all QC info for all samples using multiQC.
@@ -123,8 +103,7 @@ rule multiqc:
        fastqc_trim = expand(rules.fastqc_trimmed_reads.output.zip1, sample=SAMPLES),
        fastp = expand(rules.fastp_trim.output.json, sample=SAMPLES),
        qualimap = expand(rules.qualimap_bam_qc.output, sample=SAMPLES),
-       bamstats = expand(rules.bamtools_stats.output, sample=SAMPLES),
-       bamutil = expand(rules.bamutil_validate.output, sample=SAMPLES)
+       bamstats = expand(rules.bamtools_stats.output, sample=SAMPLES)
     output:
         '{0}/multiqc/multiqc_report.html'.format(QC_DIR)
     conda: '../envs/qc.yaml'

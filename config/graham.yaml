@@ -1,11 +1,11 @@
 # Sample IDs as list
 samples: ../resources/glue_allSamples_sampleSheet.txt
 chromosomes: ../resources/chromosome_file.txt
-gff: ../resources/TrR.v5.renamed_reformated.gtf.gz
+ref: ../resources/reference/TrR_v6_haploid_reference.fasta 
 
 # Multiple paths to raw reads is a hotfix until reads are on Genbank
 # Can be both the same if reads in in same directory (e.g., Compute Canada) 
 results_prefix: /home/santang3/scratch/glue/dnaSeqQC/results
-raw_read_prefix: /home/santang3/projects/def-johnso73/raw_data
+raw_read_prefix: /home/santang3/projects/def-johnso73/data/raw_reads
 temp_dir: /home/santang3/scratch/glue/tmp
 
