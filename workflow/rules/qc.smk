@@ -54,7 +54,7 @@ rule qualimap_bam_qc:
     QC mapped reads using Qualimap
     """
     input:
-        bam = rules.samtools_markdup.output.bam
+        unpack(get_correct_bam)
     output:
         directory('{0}/qualimap/{{sample}}_qualimap_bamqc'.format(QC_DIR))
     log: 'logs/qualimap/{sample}_bamqc.log'
@@ -80,7 +80,7 @@ rule bamtools_stats:
     Basic stats for mapped reads (e.g., % aligned, duplicates, etc.). Similar to samtools stats.
     """
     input:
-        bam = rules.samtools_markdup.output.bam
+        unpack(get_correct_bam)
     output:
         '{0}/bamtools_stats/{{sample}}_bamtools.stats'.format(QC_DIR)
     conda: '../envs/qc.yaml'

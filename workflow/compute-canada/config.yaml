@@ -1,6 +1,6 @@
 # Configuration file for launching tasks on Compute Canada
 
-jobs: 500  
+jobs: 200 
 local-cores: 1
 
 jobscript: "slurm-jobscript.sh"

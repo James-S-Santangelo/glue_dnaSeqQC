@@ -42,14 +42,16 @@ wildcard_constraints:
     chrom='|'.join([x for x in CHROMOSOMES])
 
 # Rules to be run locally on as single process
-localrules: create_tmp_dir, index_bam
+localrules: create_tmp_dir, downsample_toronto_done, index_toronto_bam, index_bam
 
 # Pipeline targets
 # Each step generates an empty flagfile as its final target
 rule all:
    input:
         # Trimming, mapping, and QC
-        '{0}/multiqc/multiqc_report.html'.format(QC_DIR)
+        '{0}/multiqc/multiqc_report.html'.format(QC_DIR),
+        # Downsample Toronto data
+        '{0}/downsample_toronto.done'.format(BAM_DIR)
 
 # Create temporary directory used throughout pipeline
 rule create_tmp_dir:
@@ -64,3 +66,4 @@ include: 'rules/ref.smk'
 include: 'rules/trimming.smk'
 include: 'rules/mapping.smk'
 include: 'rules/qc.smk'
+include: 'rules/toronto_downsample.smk'
