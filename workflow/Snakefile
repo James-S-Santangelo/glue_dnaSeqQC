@@ -21,7 +21,6 @@ REFERENCE_GENOME = config['ref']
 
 # Sample and chromosome info
 SAMPLES = SAMPLE_SHEET_DF['sample'].tolist()
-SAMPLES = SAMPLES[1501:2000]
 TOR_SAMPLES = [x for x in SAMPLES if x.startswith('s_')]
 CHROMOSOMES = pd.read_table(config['chromosomes'], header=None).iloc[:,0].tolist()
 

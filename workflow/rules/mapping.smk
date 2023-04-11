@@ -15,7 +15,7 @@ rule bwa_map_unpaired:
     threads: 2
     resources:
         mem_mb = lambda wildcards, attempt: attempt * 2500,
-        time = '01:00:00'
+        time = '03:00:00'
     shell:
         """
         ( bwa mem -t {threads} {input.ref} {input.unp} {params} |\
@@ -82,7 +82,7 @@ rule samtools_markdup:
     threads: 8
     resources:
         mem_mb = lambda wildcards, attempt: attempt * 10000,
-        time = '03:00:00'
+        time = lambda wildcards, attempt: str(attempt * 6) + ":00:00" 
     shell:
         """
         ( samtools fixmate --threads {{threads}} -m {{input}} - |\
@@ -102,6 +102,7 @@ rule index_bam:
     log: 'logs/index_bam/{sample}_index_bam.log'
     threads: 6
     resources:
+        mem_mb = '2000',
         time = '01:00:00'
     shell:
         """

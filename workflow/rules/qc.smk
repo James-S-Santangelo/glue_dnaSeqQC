@@ -106,8 +106,8 @@ rule multiqc:
        bamstats = expand(rules.bamtools_stats.output, sample=SAMPLES)
     output:
         '{0}/multiqc/multiqc_report.html'.format(QC_DIR)
-    conda: '../envs/qc.yaml'
     log: 'logs/multiqc/multiqc.log'
+    container: 'docker://ewels/multiqc:v1.14'
     resources:
         mem_mb = lambda wildcards, attempt: attempt * 60000,
         time = '06:00:00'

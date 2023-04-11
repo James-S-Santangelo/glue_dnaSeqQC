@@ -5,5 +5,4 @@ dependencies:
   - fastqc=0.11.9
   - qualimap=2.2.2
   - bamtools=2.5.1
-  - multiqc=1.9
   - bamutil=1.0.14
